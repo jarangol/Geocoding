@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <p class="notice"><%= notice %></p>
+    <p class="alert"><%= alert %></p>
+
+    <title>Maps1</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD2t8xnBAzRvitlkKz0nVe6HqSQawsUq9g&callback=initMap">
+      </script>
+  </head>
+
+  <body>
+    <%= yield %>
+  </body>
+</html>
