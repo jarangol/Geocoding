@@ -1,30 +1,30 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
 $(document).on "turbolinks:load", ->
   directionsDisplay = new (google.maps.DirectionsRenderer)
   directionsService = new (google.maps.DirectionsService)
 
   calcRoute = ->
-    origin = new (google.maps.LatLng)(6.2518400, -75.5635900)
-    destination = new (google.maps.LatLng)(6.374028999999999, -75.4402878)
-    request =
-      origin: origin
-      destination: destination
-      waypoints: [
-        {
-          location: new (google.maps.LatLng)(6.2519, -75.564)
-          stopover: false
-        # },{
-        #   location: new (google.maps.LatLng)(43.7, -79.4)
-        #   stopover: false
-        }]
-      travelMode: google.maps.TravelMode.DRIVING
-    directionsService.route request, (response, status) ->
-      if status == google.maps.DirectionsStatus.OK
-        directionsDisplay.setDirections response
+    if gon
+      size = gon.locations.length
+      alert
+      origin = new (google.maps.LatLng)(gon.locations[0].latitude, gon.locations[0].longitude)
+      destination = new (google.maps.LatLng)(gon.locations[size-1].latitude, gon.locations[size-1].longitude)
+      # waypts = []
+      # i = 1
+      # while i < size-1
+      #   waypts.push
+      #     location: new (google.maps.LatLng)(gon.locations[i].latitude,gon.locations[i].longitude)
+      #     stopover: false
+      #   i++
+      request =
+        origin: origin
+        destination: destination
+        # waypoints:waypts
+        travelMode: google.maps.TravelMode.DRIVING
+      directionsService.route request, (response, status) ->
+        if status == google.maps.DirectionsStatus.OK
+          directionsDisplay.setDirections response
+        return
       return
-    return
 
   calcRoute()
   handler = Gmaps.build('Google')
