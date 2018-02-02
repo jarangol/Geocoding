@@ -2,9 +2,11 @@ $ ->
   $(document).on 'click', '#btn_new_location', (evt) ->
     if navigator.geolocation
       navigator.geolocation.getCurrentPosition ((position) ->
-        alert(position.coords.latitude + " " + position.coords.longitude)
         $.ajax '/locations',
           type: 'POST'
+          # Añadir esto para error de 401 unauthorized
+          beforeSend: (xhr) ->
+            xhr.setRequestHeader 'X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')
           data: {
             location:{
               latitude: position.coords.latitude

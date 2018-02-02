@@ -1,73 +1,43 @@
 class LocationsController < ApplicationController
   protect_from_forgery with: :null_session
-  before_action :set_location, only: [:show, :edit, :update, :destroy]
-
+  before_action :authenticate_user!, :except => [:index]
   # GET /locations
-  # GET /locations.json
   def index
-    @locations = Location.all
-  end
-
-  # GET /locations/1
-  # GET /locations/1.json
-  def show
-  end
-
-  # GET /locations/new
-  def new
-    @location = Location.new
-  end
-
-  # GET /locations/1/edit
-  def edit
+    if user_signed_in?
+      @locations = Location.find_by(user_id: current_user.id)
+      @hash = Gmaps4rails.build_markers(@locations) do |location, marker|
+        marker.lat location.latitude
+        marker.lng location.longitude
+      end
+    end
   end
 
   # POST /locations
-  # POST /locations.json
   def create
-    @location = Location.new(location_params)
-
     respond_to do |format|
-      if @location.save
-        format.html { redirect_to @location, notice: 'Location was successfully created.' }
-        format.json { render :show, status: :created, location: @location }
-      else
-        format.html { render :new }
-        format.json { render json: @location.errors, status: :unprocessable_entity }
+      if user_signed_in?
+        @location = current_user.locations.new(location_params)
+        if @location.save
+          format.html {redirect_to action: "index", notice: 'Location was successfully created.'}
+        else
+          format.html {redirect_to action: "index", notice: 'Location was not created.'}
+        end
       end
     end
   end
 
-  # PATCH/PUT /locations/1
-  # PATCH/PUT /locations/1.json
-  def update
-    respond_to do |format|
-      if @location.update(location_params)
-        format.html { redirect_to @location, notice: 'Location was successfully updated.' }
-        format.json { render :show, status: :ok, location: @location }
-      else
-        format.html { render :edit }
-        format.json { render json: @location.errors, status: :unprocessable_entity }
-      end
-    end
+  # DELETE /locations
+  def delete_all
+    current_user.locations.delete_all
+    puts "Se borraron todas sus locations"
   end
 
-  # DELETE /locations/1
-  # DELETE /locations/1.json
-  def destroy
-    @location.destroy
-    respond_to do |format|
-      format.html { redirect_to locations_url, notice: 'Location was successfully destroyed.' }
-      format.json { head :no_content }
-    end
+  # GET /locations/
+  def my_locations
+    return current_user.locations
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_location
-      @location = Location.find(params[:id])
-    end
-
     # Never trust parameters from the scary internet, only allow the white list through.
     def location_params
       params.require(:location).permit(:latitude, :longitude)
