@@ -10,7 +10,6 @@ $ ->
               latitude: position.coords.latitude
               longitude: position.coords.longitude
             }
-
           }
           error: (jqXHR, textStatus, errorThrown) ->
             console.log("AJAX Error: #{textStatus}")
