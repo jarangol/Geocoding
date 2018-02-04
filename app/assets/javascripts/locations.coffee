@@ -5,7 +5,6 @@ $(document).on "turbolinks:load", ->
   calcRoute = ->
     if gon
       size = gon.locations.length
-      alert
       origin = new (google.maps.LatLng)(gon.locations[0].latitude, gon.locations[0].longitude)
       destination = new (google.maps.LatLng)(gon.locations[size-1].latitude, gon.locations[size-1].longitude)
       # waypts = []

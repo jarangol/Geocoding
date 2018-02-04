@@ -5,7 +5,6 @@ class LocationsController < ApplicationController
   def index
     if user_signed_in?
       gon.locations = current_user.locations
-
       # @hash = Gmaps4rails.build_markers(@locations) do |location, marker|
       #   marker.lat location.latitude
       #   marker.lng location.longitude
@@ -35,7 +34,9 @@ class LocationsController < ApplicationController
 
   # GET /locations/
   def my_locations
-    return current_user.locations
+    if user_signed_in?
+      return current_user.locations
+    end
   end
 
   private

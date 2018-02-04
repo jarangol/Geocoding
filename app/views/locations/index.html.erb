@@ -3,7 +3,8 @@
 <script src='//cdn.rawgit.com/printercu/google-maps-utility-library-v3-read-only/master/infobox/src/infobox_packed.js' type='text/javascript'></script> <!-- only if you need custom infoboxes -->
 
 <% if user_signed_in? %>
-  <button type="button" id="btn_new_location">Get my location!</button>
+  <button type="button" id="btn_new_location">Start tracking</button>
+  <button type="button" id="btn_stop_tracking">Stop tracking</button>
   <%= button_to 'Delete All Locations', delete_all_locations_path, method: :delete %>
   <div style='width: 800px;'>
     <div id="directions" style='width: 800px; height: 400px;'></div>
